@@ -1,4 +1,4 @@
-package jpa.employee;
+package jpa.department;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,14 +12,10 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Employee {
+public class Department {
     @Id
     @GeneratedValue
     private Long id;
 
-    private String surname;
-
-    public Employee(String surname) {
-        this.surname = surname;
-    }
+    private String name;
 }

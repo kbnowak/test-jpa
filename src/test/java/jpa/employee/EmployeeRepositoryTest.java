@@ -5,9 +5,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.ApplicationContext;
+import org.springframework.core.env.Environment;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.persistence.EntityManager;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -18,10 +18,16 @@ public class EmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository instance;
 
+    @Autowired
+    private Environment env;
+
+    @Autowired
+    private ApplicationContext context;
+
     @Test
     public void shouldReadAndWrite() {
         //given
-        Employee employee = new Employee("Steve");
+        Employee employee = new Employee("Johnson");
 
         //when
         Employee savedEmployee = instance.save(employee);
@@ -29,7 +35,21 @@ public class EmployeeRepositoryTest {
 
         //then
         assertThat(readEmployee).isNotNull();
-        assertThat(readEmployee.getName()).isEqualTo("Steve");
+        assertThat(readEmployee.getSurname()).isEqualTo("Johnson");
     }
 
+    @Test
+    public void printStuff() {
+        String[] beans = context.getBeanDefinitionNames();
+        System.out.println("beans:");
+        for (String bean : beans) {
+            System.out.println(bean);
+        }
+
+        Object propertySourcesPlaceholderConfigurer = context.getBean("propertySourcesPlaceholderConfigurer");
+        System.out.println("propertySourcesPlaceholderConfigurer.getClass() = " + propertySourcesPlaceholderConfigurer.getClass());
+
+        boolean propertyExists = env.containsProperty("spring.datasource.url");
+        System.out.println("spring.datasource.url exists? " + propertyExists);
+    }
 }
